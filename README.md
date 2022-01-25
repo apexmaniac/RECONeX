@@ -35,3 +35,12 @@ future, sys, os, subprocess, pyfiglet, from termcolor, from datetime, BeautifulS
 Version :- RECONeX v1.0
 
 Author :- Manav Sharma
+
+# Usage
+
+step 01: git clone https://github.com/apexmaniac/RECONeX.git
+
+step 02: cd RECONeX
+
+step 03: sudo python3 RECONeX.py 
+
