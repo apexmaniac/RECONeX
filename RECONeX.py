@@ -299,7 +299,7 @@ def IGoperation():
     print("{3} Hidden Files & Directories Crawler |")
     print("{4} Subdomain Crawler                  |")
     print("{5} Extract Links from Website         |")
-    print("{6} Google Dorking                     |")
+    print("{6} Google Dorking(**)                 |")
     print("{7} Exit from Info. Gather. Mode       |")
     print("----------------------------------------")
     choose = input("Enter your choice:-")
