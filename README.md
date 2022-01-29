@@ -12,7 +12,7 @@ Information Gathering:- In this module , a bundle of 6 tools are provided with a
     Subdomain Crawler
     Hidden Directories Crawler
     Link Extractor
-    Google Dorking
+    
 
 Man In The Middle:- In this Module , a multitool for network interception is provided which is kind of automated.
 
