@@ -12,6 +12,7 @@ Information Gathering:- In this module , a bundle of 6 tools are provided with a
     Subdomain Crawler
     Hidden Directories Crawler
     Link Extractor
+    Banner Grabber
     
 
 Man In The Middle:- In this Module , a multitool for network interception is provided which is kind of automated.
@@ -22,9 +23,17 @@ Man In The Middle:- In this Module , a multitool for network interception is pro
 
 Exploitation :- In this Module , a Custom password and reverse shell is provided which helps in less time and resource consumption.
    
-A Custom Password generator
+    A Custom Password generator
+    A custom reverse shell script generator
+    
+Wireless exploitation:- This is an automated module for wifi hacking.
 
-A custom reverse shell script generator
+    Check Available Interfaces
+    COnfigure Adapter for monitor mode & Packet Injection
+    Enable Monitor Mode
+    Scan Wifi Networks
+    Capture Handshakes
+    Crack Wifi Passwords using handshakes
    
 Language Used :- Python3 with Object Oriented Programming concepts
 
