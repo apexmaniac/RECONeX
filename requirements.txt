@@ -1,0 +1,11 @@
+subprocess
+bs4
+python3-nmap
+pyfiglet
+termcolor
+scapy
+pyperclip3
+itertools
+ipaddress
+macaddress
+scapy.layers
