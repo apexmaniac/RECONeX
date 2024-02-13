@@ -3,7 +3,7 @@ A Begineer ToolKit for Information Gathering , Man In The Middle & Exploitation
 
 RECONeX is a begineer friendly for pentesting.
 
-It consists Of Two Modules:- (A) Information Gathering (B) Man In The Middle (C)Exploiation
+It consists Of Three Modules:- (A) Information Gathering (B) Man In The Middle (C)Exploiation
 
 Information Gathering:- In this module , a bundle of 6 tools are provided with a begineer friendly usage.
 
