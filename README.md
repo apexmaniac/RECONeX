@@ -41,7 +41,7 @@ Libraries Include :-
 
 future, sys, os, subprocess, pyfiglet, from termcolor, from datetime, BeautifulSoup4, nmap ,ipaddress, re, socket, requests, urllib.parse, urlparse time scapy.all ,pyperclip3 ,scapy.layers
 
-Version :- RECONeX v1.0
+Version :- RECONeX v3.0
 
 Author :- Manav Sharma
 
